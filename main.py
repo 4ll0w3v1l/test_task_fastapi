@@ -1,6 +1,7 @@
 from fastapi import FastAPI, WebSocket, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+import json
 
 app = FastAPI()
 
@@ -17,5 +18,6 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     while True:
         data = await websocket.receive_text()
+        data = json.loads(data)
         i += 1
-        await websocket.send_text(f"{i}: {data}")
+        await websocket.send_text(f"{i}: {data['message']}")
