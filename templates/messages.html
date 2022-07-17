@@ -9,11 +9,8 @@
             <input type="text" id="messageText" autocomplete="off"/>
             <button>Send</button>
         </form>
-        <ol id='messages'>
-            {% for message in savedMessages %}
-            <li>Previous message: {{message}}</li>
-            {% endfor %}
-        </ol>
+        <ul id='messages' style="list-style-type: none;">
+        </ul>
         <script>
             var ws = new WebSocket("ws://localhost:8000/ws");
             ws.onmessage = function(event) {
