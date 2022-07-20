@@ -13,19 +13,29 @@
         </ul>
         <script>
             var ws = new WebSocket("ws://localhost:8000/ws");
-            ws.onmessage = function(event) {
-                var messages = document.getElementById('messages')
-                var message = document.createElement('li')
-                var content = document.createTextNode(event.data)
-                message.appendChild(content)
-                messages.appendChild(message)
-            };
+
             function sendMessage(event) {
                 var input = document.getElementById("messageText")
                 ws.send(JSON.stringify({message: input.value}))
                 input.value = ''
                 event.preventDefault()
-            }
+            };
+
+            ws.addEventListener('message', function (event) {
+                var data = [];
+                JSON.parse(event.data, (key, value) => {
+                    if (key == "counter"){
+                        data.push(value);
+                    };
+                    if (key == "message"){
+                        data.push(value);
+                    }
+                });
+                let ul = document.getElementById("messages");
+                let li = document.createElement("li");
+                li.appendChild(document.createTextNode(data[1] + ":" + data[0]));
+                ul.appendChild(li);
+            });
         </script>
     </body>
 </html>

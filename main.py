@@ -7,6 +7,7 @@ app = FastAPI()
 
 templates = Jinja2Templates(directory='templates')
 
+
 @app.get("/", response_class=HTMLResponse)
 async def read_item(request: Request):
     return templates.TemplateResponse("messages.html", {"request": request})
@@ -17,7 +18,7 @@ async def websocket_endpoint(websocket: WebSocket):
     i = 0
     await websocket.accept()
     while True:
-        data = await websocket.receive_text()
-        data = json.loads(data)
         i += 1
-        await websocket.send_text(f"{i}: {data['message']}")
+        data = await websocket.receive_json()
+        data['counter'] = i
+        await websocket.send_json(data)
